@@ -12,9 +12,18 @@ class App {
 
 fun main(args: Array<String>) {
     println(App().greeting)
-    val fr = FileReader(args[0])
-    val lines = fr.lines()
-    val tp = TupleParser(lines)
-    val count = tp.count()
-    println(count)
+    // offer what day we are trying to solve
+    println("What day are you on?")
+    val day = readLine()
+    println("What part are you solving?")
+    val part = readLine()
+
+    println(day)
+    println(part)
+
+//    val fr = FileReader(args[0])
+//    val lines = fr.lines()
+//    val tp = TupleParser(lines)
+//    val count = tp.count()
+//    println(count)
 }
