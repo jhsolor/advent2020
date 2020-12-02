@@ -12,8 +12,9 @@ class App {
 
 fun main(args: Array<String>) {
     println(App().greeting)
-    val fr = FileReader()
-    val nums = fr.doWork(args[0])
-    val num = findTheGoose(nums)
-    println(num)
+    val fr = FileReader(args[0])
+    val lines = fr.lines()
+    val tp = TupleParser(lines)
+    val count = tp.count()
+    println(count)
 }
