@@ -18,8 +18,10 @@ fun main(args: Array<String>) {
     println("What part are you solving?")
     val part = readLine()
 
-    println(day)
-    println(part)
+//    println(day)
+//    println(part)
+
+    TODO("Fix command line interaction")
 
 //    val fr = FileReader(args[0])
 //    val lines = fr.lines()
