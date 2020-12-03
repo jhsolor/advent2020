@@ -3,40 +3,58 @@
  */
 package adventofcode2020
 
-class App {
-    val greeting: String
-        get() {
-            return "Hello World!"
-        }
+import com.google.common.io.Resources
+
+class Resource(val resourceSuffix: String) {
+    val lines: List<String> by lazy { 
+        Resources.readLines(resource(),Charsets.UTF_8)
+    }
+
+    fun resource(): java.net.URL {
+        return Resource::class.java.getResource("${DAY_RESOURCE_CONVENTION}${resourceSuffix}")
+    }
+
+    companion object {
+        const val DAY_RESOURCE_CONVENTION = "advent_"
+    }
 }
 
 fun main(args: Array<String>) {
-    println(App().greeting)
+    
     // offer what day we are trying to solve
     println("What day are you on?")
-    val day = readLine()
+    val day = readLine()!!
+    val resource = resourceFactory(day)
+    val solver = solverFactory(day, resource)
+
     println("What part are you solving?")
-    val part = readLine()
-    
-//    println(day)
-//    println(part)
-
-    TODO("Fix command line interaction")
-
-//    val fr = FileReader(args[0])
-//    val lines = fr.lines()
+    val part = readLine()!!.toInt()
+    when(part) {
+      1 -> println(solver.solve1())
+      2 -> println(solver.solve2())
+    }
 }
 
-fun solverFactory(day: Int): Solver {
-  when(day) {
-    1 -> return Day1()
-    2 -> return Day2()   
-  }
+fun solverFactory(day: String, resource: Resource): Solver {
+    when(day) {
+      "1" -> return Day1(resource)
+      "2" -> return Day2(resource)
+    }
 
-  TODO("Not implemented")
+    TODO("Not implemented")
+}
+
+fun resourceFactory(day: String): Resource {
+    return Resource(day)
 }
 
 interface Solver {
   fun solve1(): Int
   fun solve2(): Int
 }
+
+abstract class ResourceSolver(val resource: Resource): Solver {
+
+}
+
+

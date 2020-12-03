@@ -3,10 +3,10 @@ package adventofcode2020
 
 import com.google.common.io.Resources;
 
-class Day1() : Solver {
+class Day1(resource: Resource) : ResourceSolver(resource) {
 
     private val list: List<Int> by lazy {
-       Resources.readLines(Resources.getResource("advent_1.txt"),Charsets.UTF_8).map { it.toInt() }.sorted()
+       resource.lines.map { it.toInt() }.sorted()
     }
 
     override fun solve1(): Int {

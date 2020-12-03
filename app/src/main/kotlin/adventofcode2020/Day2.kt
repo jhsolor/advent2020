@@ -2,7 +2,7 @@ package adventofcode2020
 
 import com.google.common.io.Resources
 
-class Day2() : Solver {
+class Day2(resource: Resource) : Solver {
 
     private val list: List<String> by lazy {
        Resources.readLines(Resources.getResource("advent_1.txt"),Charsets.UTF_8)
