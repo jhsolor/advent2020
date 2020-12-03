@@ -17,6 +17,7 @@ plugins {
 repositories {
     // Use JCenter for resolving dependencies.
     jcenter()
+    google()
 }
 
 dependencies {

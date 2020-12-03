@@ -1,13 +1,19 @@
 // Day1
 package adventofcode2020
 
-class Day1() {
+import com.google.common.io.Resources;
 
-    fun part1(): Int {
+class Day1() : Solver {
+
+    private val list: List<Int> by lazy {
+       Resources.readLines(Resources.getResource("advent_1.txt"),Charsets.UTF_8).map { it.toInt() }.sorted()
+    }
+
+    override fun solve1(): Int {
         TODO("Implement")
     }
 
-    fun part2(list: List<Int>): Int {
+    override fun solve2(): Int {
         // solve with a fast runner
         // but let's not make it fancy yet
         var i = 0

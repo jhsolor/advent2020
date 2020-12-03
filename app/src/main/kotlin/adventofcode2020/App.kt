@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
     val day = readLine()
     println("What part are you solving?")
     val part = readLine()
-
+    
 //    println(day)
 //    println(part)
 
@@ -25,7 +25,18 @@ fun main(args: Array<String>) {
 
 //    val fr = FileReader(args[0])
 //    val lines = fr.lines()
-//    val tp = TupleParser(lines)
-//    val count = tp.count()
-//    println(count)
+}
+
+fun solverFactory(day: Int): Solver {
+  when(day) {
+    1 -> return Day1()
+    2 -> return Day2()   
+  }
+
+  TODO("Not implemented")
+}
+
+interface Solver {
+  fun solve1(): Int
+  fun solve2(): Int
 }

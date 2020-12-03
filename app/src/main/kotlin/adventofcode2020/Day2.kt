@@ -1,11 +1,23 @@
 package adventofcode2020
 
-class TupleParser(val tuples: List<String>) {
-    val passwords: List<Password> by lazy {
-        tuples.map { it.toPassword() }
+import com.google.common.io.Resources
+
+class Day2() : Solver {
+
+    private val list: List<String> by lazy {
+       Resources.readLines(Resources.getResource("advent_1.txt"),Charsets.UTF_8)
     }
 
-    fun count(): Int {
+    val passwords: List<Password> by lazy {
+        list.map { it.toPassword() }
+    }
+
+    override fun solve1(): Int {
+        var valid = 0
+        for (pw in passwords) if (pw.valid()) valid++
+        return valid
+    }
+    override fun solve2(): Int {
         var valid = 0
         for (pw in passwords) if (pw.hardValid()) valid++
         return valid
