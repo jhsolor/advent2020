@@ -41,6 +41,7 @@ class TobogganSlope(val rows: List<String>) {
         while (y < height) {
             // if y > 1, we have to stop at each x value on the way down the slope...
             x = x + over
+            // lazily handle "buffer overflows"
             if (x >= width) x = (x % width)
             for (i in 1..down) {
                 y++
@@ -58,7 +59,6 @@ class TobogganSlope(val rows: List<String>) {
                 val string = String(row)
                 println("(${x.format(2)},${y.format(3)}): ${string}")
             }
-            // lazily handle "buffer overflows"
         }
         return trees
     }
