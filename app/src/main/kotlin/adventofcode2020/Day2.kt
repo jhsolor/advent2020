@@ -12,15 +12,15 @@ class Day2(resource: Resource) : Solver {
         list.map { it.toPassword() }
     }
 
-    override fun solve1(): Int {
+    override fun solve1(): Long {
         var valid = 0
         for (pw in passwords) if (pw.valid()) valid++
-        return valid
+        return valid.toLong()
     }
-    override fun solve2(): Int {
+    override fun solve2(): Long {
         var valid = 0
         for (pw in passwords) if (pw.hardValid()) valid++
-        return valid
+        return valid.toLong()
     }
 }
 
