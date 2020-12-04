@@ -3,11 +3,7 @@ package adventofcode2020
 class Day3(resource: Resource) : ResourceSolver(resource) {
     override fun solve1(): Long {
         val ts = TobogganSlope(resource.lines)
-        println("Put x of slope")
-        val x = readLine()!!.toInt()
-        println("Put y of slope")
-        val y = readLine()!!.toInt()
-        return ts.slide(x,y).toLong()
+        return ts.slide(3,1).toLong()
     }
     override fun solve2(): Long {
         val ts = TobogganSlope(resource.lines)

@@ -15,3 +15,8 @@ class Resource(val resourceSuffix: String) {
         const val DAY_RESOURCE_CONVENTION = "advent_"
     }
 }
+
+fun resourceFactory(day: String): Resource {
+    return Resource(day)
+}
+
