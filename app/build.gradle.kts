@@ -35,6 +35,9 @@ dependencies {
 
     // Use the Kotlin JUnit integration.
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit")
+
+    // Used for assertions
+    testImplementation("com.natpryce:hamkrest:1.7.0.3")
 }
 
 application {

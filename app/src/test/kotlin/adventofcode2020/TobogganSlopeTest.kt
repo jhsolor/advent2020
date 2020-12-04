@@ -15,8 +15,7 @@ class TobogganSlopeTest {
     }
 
     @Test fun testSlopesDownTwo() {
-        assertEquals(1, testSlope.slide(1, 2))
-        assertEquals(3, testSlope.slide(2, 2))
+        assertEquals(0, testSlope.slide(1, 2)) // because we teleport through the first tree
     }
 
 

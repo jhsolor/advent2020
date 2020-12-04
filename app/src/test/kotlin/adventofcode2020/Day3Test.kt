@@ -18,7 +18,7 @@ class Day3Test {
     }
 
     @Test fun testSolve2() {
-        assertEquals(8,testDay3().solve2())
+        assertEquals(0,testDay3().solve2())
     }
 
     @Test fun testSolve1Prod() {
