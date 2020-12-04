@@ -2,8 +2,21 @@
 package adventofcode2020
 
 class Day4(resource: Resource) : ResourceSolver(resource) {
+    val passports by lazy {
+        val pp = collapseStringsToPassport(resource.lines)
+        println(pp)
+        pp
+    }
     override fun solve1(): Long {
-        TODO("Not Implemented")
+        val p: Long = passports.fold(0.toLong(), { acc, next -> 
+            if (next.validNorthPole()) {
+                println(acc)
+                acc + 1
+            }
+            else acc
+        })
+        println(p)
+        return p
     }
     override fun solve2(): Long {
         TODO("Not Implemented")
