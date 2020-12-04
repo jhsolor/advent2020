@@ -49,23 +49,32 @@ data class Passport(val map: Map<String, String>){
     }
 }
 
+fun collapseStringsToPassport(strings: List<String>): List<Passport> {
+    var line = 0
+    var s = String()
+    // need a mutable list of passports
+    val passports = mutableListOf<Passport>()
+    while(line < strings.size) {
+        val thisRow = strings[line]
+        s = s.plus(" ").plus(thisRow)
+        // if this row is empty, close off our string and add it to the list 
+        // or if we're on the last line, same deal
+        if (thisRow.length == 0 || line + 1 == strings.size) {
+            passports.add(s.toPassport())
+            s = String()
+        }
+        line++ 
+    }
+    return passports
+}
+
 fun String.toPassport(): Passport {
+    // Assumes all passport blocks are on one line
     val matches = Passport.PARSER_REGEX.findAll(this)
-//    var pp = Passport()
     var hm = HashMap<String, String>()
     for(match in matches) {
         val(key, value) = match.destructured
         hm.put(key, value)
-//        when(key){
-//            "byr" -> pp.birthYear = value
-//            "iyr" -> pp.issueYear = value
-//            "eyr" -> pp.expirationYear = value
-//            "hgt" -> pp.height = value
-//            "hcl" -> pp.hairColor = value
-//            "ecl" -> pp.eyeColor = value
-//            "pid" -> pp.passportId = value
-//            "cid" -> pp.countryId = value
-//        }
     }
     if(!hm.containsKey("cid")) hm.put("cid",String()) //no need to do a default map
     return Passport(hm)
