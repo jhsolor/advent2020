@@ -65,4 +65,3 @@ class TobogganSlope(val rows: List<String>) {
     }
 }
 
-fun Int.format(digits: Int) = "%0${digits}d".format(this)
