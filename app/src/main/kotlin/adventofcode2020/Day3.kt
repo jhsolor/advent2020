@@ -43,8 +43,9 @@ class TobogganSlope(val rows: List<String>) {
             x = x + over
             // lazily handle "buffer overflows"
             if (x >= width) x = (x % width)
-            for (i in 1..down) {
-                y++
+            // for (i in 1..down) { // lol apparently we fly over trees in between us & our target
+            
+                y += down
                 if (y >= height) {
                     println("Slope ${over}, ${down} encountered ${trees} trees!")
                     return trees
@@ -58,7 +59,7 @@ class TobogganSlope(val rows: List<String>) {
                 }
                 val string = String(row)
                 println("(${x.format(2)},${y.format(3)}): ${string}")
-            }
+           // }
         }
         return trees
     }
