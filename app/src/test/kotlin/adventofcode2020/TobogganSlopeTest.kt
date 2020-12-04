@@ -19,9 +19,6 @@ class TobogganSlopeTest {
         assertEquals(3, testSlope.slide(2, 2))
     }
 
-    fun testSlope(): TobogganSlope {
-        return TobogganSlope(TEST_SLOPE)
-    }
 
 // #...#
 // ##..#
