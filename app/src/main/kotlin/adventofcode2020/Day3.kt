@@ -58,7 +58,7 @@ class TobogganSlope(val rows: List<String>) {
                     row[x] = 'O'
                 }
                 val string = String(row)
-                println("(${x.format(2)},${y.format(3)}): ${string}")
+//                println("(${x.format(2)},${y.format(3)}): ${string}")
            // }
         }
         return trees
