@@ -48,25 +48,6 @@ class Day4Test {
         assertThat(pps[0],isA<PassportDTO>())
     }
 
-    private fun harnessBoundedYear(min: Int, max: Int, fcn: (year: String) -> Year){
-        assertThat(fcn(min.toString()),isA<Year>())
-        assertThat(fcn(max.toString()),isA<Year>())
-        assertThat({fcn((min - 1).toString())},throws<IllegalArgumentException>())
-        assertThat({fcn((max + 1).toString())},throws<IllegalArgumentException>())
-    }
-
-    @Test fun testBirthYearBetween1920and2002(){
-        harnessBoundedYear(1920, 2002, ::BirthYear)
-    }
-
-    @Test fun testIssueYearBetween2010and2020(){
-        harnessBoundedYear(2010, 2020, ::IssueYear)
-    }
-
-    @Test fun testExpiryYearBetween2020and2030(){
-        harnessBoundedYear(2020, 2030, ::ExpiryYear)
-    }
-
     @Test fun testHeightFromString() {
         assertThat(Height.fromString("150cm"), isA<Height>())
         assertThat(Height.fromString("70in"), isA<Height>())
@@ -77,17 +58,17 @@ class Day4Test {
     @Test fun testHeightWithinBoundaries() {
         assertThat(Height(Measure.Inches, 75), isA<Height>())
         assertThat(Height(Measure.Centimeters, 150), isA<Height>())
-        assertThat({Height(Measure.Inches, 58)}, throws<IllegalArgumentException>())
-        assertThat({Height(Measure.Inches, 77)}, throws<IllegalArgumentException>())
-        assertThat({Height(Measure.Centimeters, 149)}, throws<IllegalArgumentException>())
-        assertThat({Height(Measure.Centimeters, 194)}, throws<IllegalArgumentException>())
+        assertThat({Bounded(Height(Measure.Inches, 58),Passport.Companion::validHeight)}, throws<IllegalArgumentException>())
+        assertThat({Bounded(Height(Measure.Inches, 77),Passport.Companion::validHeight)}, throws<IllegalArgumentException>())
+        assertThat({Bounded(Height(Measure.Centimeters, 149),Passport.Companion::validHeight)}, throws<IllegalArgumentException>())
+        assertThat({Bounded(Height(Measure.Centimeters, 194),Passport.Companion::validHeight)}, throws<IllegalArgumentException>())
     }
 
     @Test fun testMakingPassports() {
         assertThat(Passport(
-            BirthYear("1921"),
-            IssueYear("2015"),
-            ExpiryYear("2025"),
+            Year(1921),
+            Year(2015),
+            Year(2025),
             Height.fromString("70in"),
             "#000000",
             "amb",
@@ -100,9 +81,9 @@ class Day4Test {
 
     @Test fun testNotMakingPassports() {
         assertThat({Passport(
-            BirthYear("1919"), //BAD
-            IssueYear("2015"),
-            ExpiryYear("2025"),
+            Year(1919), //BAD
+            Year(2015),
+            Year(2025),
             Height.fromString("70in"),
             "#000000",
             "amb",

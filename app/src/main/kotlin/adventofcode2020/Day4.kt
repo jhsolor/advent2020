@@ -36,6 +36,8 @@ class Day4(resource: Resource) : ResourceSolver(resource) {
 }
 
 data class PassportDTO(val map: Map<String, String>){
+    // Fooling around with map delegate properties
+
     val byr by map // birth year
     val iyr by map // issue year
     val eyr by map // expiry year
@@ -78,71 +80,58 @@ data class PassportDTO(val map: Map<String, String>){
 
 fun PassportDTO.toPassport(): Passport {
     if(!this.validNorthPole()) throw IllegalArgumentException("Can only convert valid DTOs")
-    return Passport(BirthYear(this.byr), IssueYear(this.iyr), ExpiryYear(this.eyr), Height.fromString(this.hgt), this.hcl, this.ecl, this.pid, this.cid)
+    return Passport(Year.fromString(this.byr), Year.fromString(this.iyr), Year.fromString(this.eyr), Height.fromString(this.hgt), this.hcl, this.ecl, this.pid, this.cid)
 }
 
 // now let's strongly type our passport
 
 class Passport(byr: Year, iyr: Year, eyr: Year, hgt: Height, hcl: String, ecl: String, pid: String, cid: String) {
-    // hcl (Hair Color) - a # followed by exactly six characters 0-9 or a-f.
-    // ecl (Eye Color) - exactly one of: amb blu brn gry grn hzl oth.
-    // pid (Passport ID) - a nine-digit number, including leading zeroes.
-    // cid (Country ID) - ignored, missing or not.
-
     private val eyeColors: List<String> = listOf("amb","blu","brn","gry","grn","hzl","oth")
 
     init {
+        Bounded<Year>(byr, { y -> y.year >= 1920 && y.year <= 2002 })
+        Bounded<Year>(iyr, { y -> y.year >= 2010 && y.year <= 2020 })
+        Bounded<Year>(eyr, { y -> y.year >= 2020 && y.year <= 2030 })
+        Bounded<Height>(hgt, Passport.Companion::validHeight)
         // I did the rest as types to fool around with that system but now I'm getting bored with it
-        """#[0-9a-f]{6}""".toRegex().matchEntire(hcl) ?: throw IllegalArgumentException("Hair color must be a hex color code")
-        """[\d]{9}""".toRegex().matchEntire(pid) ?: throw IllegalArgumentException("Not a valid pid: ${pid}")
-        if(!eyeColors.contains(ecl)) throw IllegalArgumentException("Not a valid eye color: ${ecl}")
+        Bounded<String>(hcl, { s -> """#[0-9a-f]{6}""".toRegex().matchEntire(s) != null })
+        Bounded<String>(pid, { s -> """[\d]{9}""".toRegex().matchEntire(s) != null })
+        Bounded<String>(ecl, Passport.Companion::validEyeColor)
+    }
+
+    companion object {
+        private val eyeColors = listOf("amb","blu","brn","gry","grn","hzl","oth")
+
+        fun validEyeColor(s: String): Boolean = eyeColors.contains(s)
+        fun validHeight(h: Height): Boolean {
+            return when(h.unit) {
+                Measure.Inches -> h.value >=59 && h.value <= 76
+                Measure.Centimeters -> h.value >= 150 && h.value <= 193
+            }
+        }
     }
 }
+
+class Bounded<T>(val value: T, val boundary: (t: T) -> Boolean) {
+    init {
+        if(!boundary(value)) throw IllegalArgumentException("Value did not meet the boundary condition")
+    }
+}
+
 
 class Year(val year: Int){
-}
-
-// Pure OO would say let's do these as subclasses. Experimenting with Factoriees
-
-fun BirthYear(s: String): Year {
-    // byr (Birth Year) - four digits; at least 1920 and at most 2002.
-    return boundedYear(s, 1920, 2002)
-}
-
-fun IssueYear(s: String): Year {
-    // iyr (Issue Year) - four digits; at least 2010 and at most 2020.
-    return boundedYear(s, 2010, 2020)
-}
-
-fun ExpiryYear(s: String): Year {
-    // eyr (Expiration Year) - four digits; at least 2020 and at most 2030.
-    return boundedYear(s, 2020, 2030)
-}
-
-private fun boundedYear(s: String, min: Int, max: Int): Year {
-    val regex = """([\d]{4})""".toRegex()
-    val m = regex.matchEntire(s) ?: throw IllegalArgumentException("Year must be YYYY")
-    val y = m.value.toInt()
-    return when {
-        y < min -> throw IllegalArgumentException("Invalid before ${min}")
-        y > max -> throw IllegalArgumentException("Invalid after ${max}")
-        else -> Year(y)
+    companion object {
+        fun fromString(s: String): Year {
+            val y = """([\d]{4})""".toRegex().matchEntire(s)?.value?.toInt() ?: throw IllegalArgumentException("Year must be YYYY")
+            return Year(y)
+        }
     }
 }
 
-class Height(unit: Measure, value: Int){
+class Height(val unit: Measure, val value: Int){
     // hgt (Height) - a number followed by either cm or in:
     // If cm, the number must be at least 150 and at most 193.
     // If in, the number must be at least 59 and at most 76.
-    private val MIN_INCHES: Int = 59
-    private val MAX_INCHES: Int = 76
-    private val MIN_CM: Int = 150
-    private val MAX_CM: Int = 193
-    init {
-        if(unit == Measure.Inches && (value > MAX_INCHES || value < MIN_INCHES)) throw IllegalArgumentException("Inches must be between ${MIN_INCHES} and ${MAX_INCHES}")
-        if(unit == Measure.Centimeters && (value > MAX_CM || value < MIN_CM)) throw IllegalArgumentException("Centimeters must be between ${MIN_CM} and ${MAX_CM}")
-    }
-
     companion object {
         fun fromString(s: String): Height {
             val (height, measure) = """([\d]{2,3})(in|cm)""".toRegex().matchEntire(s)?.destructured ?: throw IllegalArgumentException("Height must be DDDuu")
