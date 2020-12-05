@@ -35,15 +35,13 @@ fun missingSeat(l: List<String>): Int {
     // seats 0..8
     // numbers 0..1024
     var i = 0
-    var j = 1
     // 0 1 2 3 4 5 7 8 9
     //           i j
-    while(j <= 1024) {
-        if(ids[j] - ids[i] > 1) {
+    while(i < 1024) {
+        if(ids[i+1] - ids[i] > 1) {
             return ids[i] + 1
         }
         i++
-        j++
     }
     throw IllegalStateException()
 }
