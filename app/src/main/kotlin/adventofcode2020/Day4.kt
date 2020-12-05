@@ -93,7 +93,6 @@ class Passport(byr: Year, iyr: Year, eyr: Year, hgt: Height, hcl: String, ecl: S
         Bounded<Year>(iyr, { y -> y.year >= 2010 && y.year <= 2020 })
         Bounded<Year>(eyr, { y -> y.year >= 2020 && y.year <= 2030 })
         Bounded<Height>(hgt, Passport.Companion::validHeight)
-        // I did the rest as types to fool around with that system but now I'm getting bored with it
         Bounded<String>(hcl, { s -> """#[0-9a-f]{6}""".toRegex().matchEntire(s) != null })
         Bounded<String>(pid, { s -> """[\d]{9}""".toRegex().matchEntire(s) != null })
         Bounded<String>(ecl, Passport.Companion::validEyeColor)
@@ -147,11 +146,6 @@ class Height(val unit: Measure, val value: Int){
 enum class Measure(){
     Centimeters, Inches
 }
-
-// enum class HairColor(){
-// }
-// class EyeColor(){}
-// class PassportId(){}
 
 fun collapseStringsToPassport(strings: List<String>): List<PassportDTO> {
     var line = 0
