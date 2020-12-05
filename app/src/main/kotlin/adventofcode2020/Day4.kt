@@ -80,7 +80,16 @@ data class PassportDTO(val map: Map<String, String>){
 
 fun PassportDTO.toPassport(): Passport {
     if(!this.validNorthPole()) throw IllegalArgumentException("Can only convert valid DTOs")
-    return Passport(Year.fromString(this.byr), Year.fromString(this.iyr), Year.fromString(this.eyr), Height.fromString(this.hgt), this.hcl, this.ecl, this.pid, this.cid)
+    return Passport(
+        byr = Year.fromString(this.byr),
+        iyr = Year.fromString(this.iyr),
+        eyr = Year.fromString(this.eyr),
+        hgt = Height.fromString(this.hgt),
+        hcl = this.hcl,
+        ecl = this.ecl,
+        pid = this.pid,
+        cid = this.cid
+    )
 }
 
 // now let's strongly type our passport
