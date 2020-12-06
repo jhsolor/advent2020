@@ -20,6 +20,7 @@ class Day6(resource: Resource) : ResourceSolver(resource) {
             var alpha = passengers[0].toCharArray().toMutableList()
             for (passenger in passengers.drop(1)) {
                 alpha = alpha.intersect(passenger.asIterable()).toTypedArray().toMutableList()
+                if (alpha.size == 0) break
             }
             result += alpha.size
         }
