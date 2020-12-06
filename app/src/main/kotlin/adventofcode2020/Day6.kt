@@ -18,7 +18,7 @@ class Day6(resource: Resource) : ResourceSolver(resource) {
         for (group in resource.grouped) {
             val passengers = group.split(" ").filter { it.length > 0 }
             var alpha = passengers[0].toCharArray().toMutableList()
-            for (passenger in passengers) {
+            for (passenger in passengers.drop(1)) {
                 alpha = alpha.intersect(passenger.asIterable()).toTypedArray().toMutableList()
             }
             result += alpha.size
