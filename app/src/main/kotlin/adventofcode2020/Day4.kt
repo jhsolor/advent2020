@@ -1,4 +1,3 @@
-
 package adventofcode2020
 
 class Day4(resource: Resource) : ResourceSolver(resource) {
@@ -156,22 +155,27 @@ enum class Measure(){
     Centimeters, Inches
 }
 
-fun collapseStringsToPassport(strings: List<String>): List<PassportDTO> {
+fun collapseLines(strings: List<String>, delim: String): List<String> {
     var line = 0
     var s = String()
-    // need a mutable list of passports
-    val passports = mutableListOf<PassportDTO>()
+    // need a mutable list
+    val collapsed = mutableListOf<String>()
     while(line < strings.size) {
         val thisRow = strings[line]
-        s = s.plus(" ").plus(thisRow)
+        s = s.plus(delim).plus(thisRow)
         // if this row is empty, close off our string and add it to the list 
         // or if we're on the last line, same deal
         if (thisRow.length == 0 || line + 1 == strings.size) {
-            passports.add(s.toPassportDTO())
+            collapsed.add(s)
             s = String()
         }
         line++ 
     }
+    return collapsed
+ }
+
+fun collapseStringsToPassport(strings: List<String>): List<PassportDTO> {
+    val passports = collapseLines(strings, " ").map { it.toPassportDTO() }
     return passports
 }
 
@@ -186,3 +190,4 @@ fun String.toPassportDTO(): PassportDTO {
     if(!hm.containsKey("cid")) hm.put("cid",String()) //no need to do a default map
     return PassportDTO(hm)
 }
+
