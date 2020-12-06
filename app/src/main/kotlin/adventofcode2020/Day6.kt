@@ -16,7 +16,7 @@ class Day6(resource: Resource) : ResourceSolver(resource) {
     fun countUniform(): Int{
         var result = 0
         for (group in resource.grouped) {
-            var passengers = group.split(" ").filter { it.length > 0 }
+            val passengers = group.split(" ").filter { it.length > 0 }
             var alpha = ('a'..'z').toMutableList()
             for (passenger in passengers) {
                 alpha = alpha.intersect(passenger.asIterable()).toTypedArray().toMutableList()
