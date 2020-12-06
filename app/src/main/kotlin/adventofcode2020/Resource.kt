@@ -8,7 +8,7 @@ class Resource(val resourceSuffix: String) {
     }
 
     val grouped: List<String> by lazy {
-        lines.collapseLines()
+        lines.collapseLines().filter { it.length > 0 }
     }
 
     fun resource(): java.net.URL {
