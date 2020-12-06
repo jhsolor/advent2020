@@ -7,6 +7,10 @@ class Resource(val resourceSuffix: String) {
         Resources.readLines(resource(),Charsets.UTF_8)
     }
 
+    val grouped: List<String> by lazy {
+        lines.collapseLines()
+    }
+
     fun resource(): java.net.URL {
         return Resource::class.java.getResource("${DAY_RESOURCE_CONVENTION}${resourceSuffix}")
     }
