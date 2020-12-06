@@ -155,27 +155,8 @@ enum class Measure(){
     Centimeters, Inches
 }
 
-fun collapseLines(strings: List<String>, delim: String): List<String> {
-    var line = 0
-    var s = String()
-    // need a mutable list
-    val collapsed = mutableListOf<String>()
-    while(line < strings.size) {
-        val thisRow = strings[line]
-        s = s.plus(delim).plus(thisRow)
-        // if this row is empty, close off our string and add it to the list 
-        // or if we're on the last line, same deal
-        if (thisRow.length == 0 || line + 1 == strings.size) {
-            collapsed.add(s)
-            s = String()
-        }
-        line++ 
-    }
-    return collapsed
- }
-
 fun collapseStringsToPassport(strings: List<String>): List<PassportDTO> {
-    val passports = collapseLines(strings, " ").map { it.toPassportDTO() }
+    val passports = strings.collapseLines().map { it.toPassportDTO() }
     return passports
 }
 
