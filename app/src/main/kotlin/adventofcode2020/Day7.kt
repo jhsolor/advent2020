@@ -42,10 +42,8 @@ class Day7(resource: Resource) : ResourceSolver(resource) {
         val contents = bagreg.findAll(makes).toList()
         for (content in contents) {
             val (qty, descriptor) = content.destructured
-            val numericQty = if (qty == "no") 0 else qty.toInt()
-            if (numericQty == 0) { continue }
-            //println("${descriptor}: ${numericQty}")
-            rule.put(descriptor, numericQty)
+            if (qty == "no") continue
+            rule.put(descriptor, qty.toInt())
         }
         return Pair(bag, rule)
     }
