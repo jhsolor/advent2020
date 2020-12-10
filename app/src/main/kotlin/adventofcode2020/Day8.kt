@@ -6,7 +6,7 @@ class Day8(resource: Resource) : ResourceSolver(resource) {
     }
 
     override fun solve2(): Long {
-        TODO("Implement")
+        return game().fix()
     }
 
     fun game(): Game {
@@ -24,7 +24,6 @@ class Instruction(var type: InstructionType, val num: Int) {
     var mutated: Int = 0
     val originalType = type
     fun visit() {
-        println(this)
         if(visited) throw InfiniteLoopException("Already visited this instruction ${type} ${num}")
         visited = true
     }
@@ -96,8 +95,6 @@ class Game(val instructions: List<Instruction>) {
         main()
         var walkBack = 0
         val maxWalkBack = visited.size - 2
-        // val looper = instructions[loop] // memoize the looper
-        // println("Looper: ${looper}")
         while(walkBack < maxWalkBack) { 
             var loopPtr = visited[maxWalkBack - walkBack]
             try { 
@@ -116,14 +113,12 @@ class Game(val instructions: List<Instruction>) {
     }
 
     fun fixState(ptr: Int) {
-        println("Starting loop with ${instructions[ptr]}")
         instructions[ptr].mutate()
         reset()
         loop()
     }
         
     fun revert(ptr: Int) {
-        println("Reverting ${instructions[ptr]}")
         instructions[ptr].revert()
     }
 
@@ -140,7 +135,6 @@ class Game(val instructions: List<Instruction>) {
         curPtr += j
         if(curPtr >= instructions.size) return Instruction(InstructionType.Terminate, 0)
         visited.add(curPtr)
-        println(curPtr)
         instructions[curPtr].visit()
         return instructions[curPtr]
     }
