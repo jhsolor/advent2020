@@ -36,10 +36,8 @@ class Day8Test {
     }
 
     @Test fun testEndToEnd() {
-        var d = Day8(Resource("8"))
-        val l = d.resource.lines[0]
-        val r = Instruction.fromString(l)
-        TODO("Implement test")
+        var g = Day8(Resource("8b")).game()
+        assertEquals(8, g.fix())
     }
 }
 

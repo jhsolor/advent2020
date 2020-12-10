@@ -4,7 +4,7 @@ import com.google.common.io.Resources
 
 class Resource(val resourceSuffix: String) {
     val lines: List<String> by lazy { 
-        Resources.readLines(resource(),Charsets.UTF_8)
+        Resources.readLines(resource(),Charsets.UTF_8).filter { it.length > 0 }
     }
 
     val grouped: List<String> by lazy {

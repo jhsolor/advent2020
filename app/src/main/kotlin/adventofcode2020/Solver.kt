@@ -9,6 +9,7 @@ fun solverFactory(day: String, resource: Resource): Solver {
       "5" -> return Day5(resource)
       "6" -> return Day6(resource)
       "7" -> return Day7(resource)
+      "8" -> return Day8(resource)
     }
 
     throw IllegalArgumentException("Day \"${day}\" is not a valid optoion")
