@@ -56,4 +56,26 @@ class Day10Test {
         println(ja.deltaDistribution)
         assertEquals(220, ja.multiplySpread())
     }
+   @Test fun testPermutations() {
+        val ja = Resource("10a").lines.toJoltageAdapters(true)
+        assertEquals(8, ja.configs())
+    }
+
+   @Test fun testPerm1() {
+        val l = listOf("1","2","3","4","5").toJoltageAdapters(true)
+        println(l)
+        assertEquals(12, l.configs())
+   }
+
+    @Test fun testPerm1to6() {
+        val l = listOf("1","2","3","4","5","6").toJoltageAdapters(true)
+        println(l)
+        assertEquals(14, l.configs())
+   }
+     
+   @Test fun testBigPermutations() {
+        val jb = Resource("10b").lines.toJoltageAdapters(true)
+        assertEquals(19208, jb.configs())
+
+   }
 }
