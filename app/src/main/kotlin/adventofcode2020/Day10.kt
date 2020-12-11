@@ -99,6 +99,37 @@ class JoltageAnalyzer(private val firstLink: JoltageAdapter) {
         // on bigger sets we get to exclude all of the permutations above the #'s we're missing, so the actual # doesn't matter
         // e.g.  1,2,3,4,7 is equivalent to 1,2,3,4,5 for establishing the upper bound (but they differ in the lower bound, because in the 1st set, 4 is not removable)
 
+        // maybe something around 2 ^ # of removable switches is the solution space
+
+        // there is a minimum # we need to have
+        // 1 | - | - | 4 | is our set, that's it. there's 0
+        // 1 | 2 | - | 4 | is our set, there's 2 options: 1 | - | - | 4 is the other one
+        // 1 | 2 | 3 | 4 | is our set, there's also 1 | - | 3 | 4, and no other additional options - the addition of a switch added 2 more options
+        // so 1,2,3,4 has 2 + 2 + 1 options = 5 out of 4 switches 
+        // nominally 16 options = 2^4
+        // but we eliminate the first and last switch (boundary conditions = they must be on) -> 2^2 (remaining problem space) + 1 (boundary set) = 5
+        // now let's add 5
+        // 1 | 2 | 3 | 4 | 5 - the options for the first 4 switches remain unchanged
+        // 2 | 3 | 4 | 5 - we have to peek back/forward the spread (3)
+        // can we turn off switch 4? Yes, we can now. Problem space just grew to 2^3 + 1 = 9
+        // initial 5 options plus
+        // 1 | 2 | - | - | 5
+        // 1 | - | 3 | - | 5
+        // 1 | - | 3 | - | 5
+        // 1 | 2 | 3 | - | 5 (all the versions where 4 is off)
+        // . if we can't, we need to move to the next one. Let's add 7 as an example instead of 5
+        // 1 | 2 | 3 | 4 | 7
+        // is the same as
+        // 1 | 2 | 3 | 4 | - | - | - | 7
+        // we gain 0 options, because we can't turn 4 off
+        // if we add 6, we gain all the "4 off options" because 6 is 3 greater than 3 - it's still 2^3 + 1
+        // 1 | 2 | 3 | 4 | - | 6
+        // so every gap of 3 adds 1 power of 2 to our problem space
+        // every gap of 2 adds 2 powers of 2 to our problem space
+        // every gap of 1 adds 3 power of 2 to our problem space
+        // except at the boundary - hahaha
+        // that's why the charger is 3 more than the rest, it takes away the hard case where a gap of 2 or 1 at the end only adds 1 more power of 2
+        // so I think the solution is 1 + 2 ^ ( 3*g1 + 2*g2 + 1*g3 )
     }
 }
 
