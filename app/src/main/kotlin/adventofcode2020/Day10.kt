@@ -14,8 +14,7 @@ class Day10(resource: Resource) : ResourceSolver(resource) {
     override fun solve1(): Long {
         val j = resource.lines.toJoltageAdapters(true)
         val ja = JoltageAnalyzer(j)
-        TODO("Fix")
-//        return ja.multiplySpread()
+        return ja.multiplySpread()
     }
     override fun solve2(): Long {
          val j = resource.lines.toJoltageAdapters(true)
@@ -35,6 +34,15 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
     fun end(): JoltageAdapter {
         if (nextAdapter != null) return nextAdapter!!.end()
         return this
+    }
+
+    fun next(): JoltageAdapter? {
+        return nextAdapter
+    }
+
+    fun delta(): Int? {
+        if (nextAdapter == null) return null
+        return nextAdapter!!.output - output
     }
 
     fun appendCharger() { 
@@ -118,6 +126,12 @@ class JoltageAnalyzer(private val firstLink: JoltageAdapter) {
     val deltaDistribution: HashMap<Int,Int> by lazy {
         findDistribution()
     }
+
+	// 1 | 2 | 3 | 4 | 5 |
+    fun multiplySpread(): Long {
+        return deltaDistribution.get(1)!!.toLong() * deltaDistribution.get(3)!!.toLong()
+    }
+
     private fun findDistribution(): HashMap<Int, Int> { 
         var d = HashMap<Int,Int> ()
         var l: JoltageAdapter? = firstLink
