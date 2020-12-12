@@ -7,7 +7,7 @@ fun List<String>.collapseLines(delim: String = " "): List<String> {
     var s = String()
     // need a mutable list
     val collapsed = mutableListOf<String>()
-    while(line < this.size) {
+    while (line < this.size) {
         val thisRow = this[line]
         s = s.plus(delim).plus(thisRow)
         // if this row is empty, close off our string and add it to the list 
@@ -19,4 +19,4 @@ fun List<String>.collapseLines(delim: String = " "): List<String> {
         line++
     }
     return collapsed
- }
+}

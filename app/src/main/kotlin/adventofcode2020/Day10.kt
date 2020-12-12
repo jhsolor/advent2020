@@ -8,7 +8,6 @@
 
 // iterate over the list and collect the deltas into counters, probably hashmap for extensibility later
 package adventofcode2020
-import kotlin.math.pow
 
 class Day10(resource: Resource) : ResourceSolver(resource) {
     override fun solve1(): Long {
@@ -17,8 +16,8 @@ class Day10(resource: Resource) : ResourceSolver(resource) {
         return ja.multiplySpread()
     }
     override fun solve2(): Long {
-         val j = resource.lines.toJoltageAdapters(true)
-         return j.end().paths() 
+        val j = resource.lines.toJoltageAdapters(true)
+        return j.end().paths()
     }
 }
 
@@ -26,7 +25,7 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
     var nextAdapter: JoltageAdapter? = null
     fun append(joltageAdapter: JoltageAdapter): JoltageAdapter {
         val delta = joltageAdapter.output - output
-        if (delta > maxJoltageGap) throw IllegalArgumentException("${delta} is greater than max allowed gap ${maxJoltageGap}")
+        if (delta > maxJoltageGap) throw IllegalArgumentException("$delta is greater than max allowed gap $maxJoltageGap")
         nextAdapter = joltageAdapter
         return nextAdapter as JoltageAdapter
     }
@@ -45,7 +44,7 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
         return nextAdapter!!.output - output
     }
 
-    fun appendCharger() { 
+    fun appendCharger() {
         val e = end()
         var j = JoltageAdapter(e.output + 3, 3, e)
         e.append(j)
@@ -67,7 +66,7 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
     }
 
     // How many configurations this switch can be a part of
-    fun paths() : Long {
+    fun paths(): Long {
         // Break this down into:
         // how many paths are there to this point
         // from the last 3 points
@@ -80,18 +79,18 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
 // there can be 1, 2, or 3 nodes that can lead us here
         var p: Long = 0
         val allPaths = lookback.map { it.paths }
-        for(path in allPaths) {
+        for (path in allPaths) {
             if (path == 0.toLong()) p++
             else p += path
         }
 
-        println("${p} paths to ${output} from ${lookback}")
-        return p 
+        println("$p paths to $output from $lookback")
+        return p
     }
 
     val paths: Long by lazy {
         var p = paths()
-        println("Memoizing ${output} paths: ${p}")
+        println("Memoizing $output paths: $p")
         p
     }
 
@@ -100,15 +99,14 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
         lookback()
     }
 
-
     fun lookback(from: Int = output): List<JoltageAdapter> {
         // walk back until we find one that's not too far back voltage-wise
         var l = mutableListOf<JoltageAdapter>()
-        if (previous == null) { println("Node ${output} has no previous nodes, returning empty list") ; return l }
+        if (previous == null) { println("Node $output has no previous nodes, returning empty list") ; return l }
         var prev = previous
-        while(prev != null){
+        while (prev != null) {
             val pv = prev!!.output
-            if(from - pv >  maxJoltageGap) return l
+            if (from - pv > maxJoltageGap) return l
             l.add(prev)
             prev = prev?.previous
         }
@@ -117,13 +115,13 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
     }
 
     override fun toString(): String {
-        var s = "${output} {${paths}}"
+        var s = "$output {$paths}"
         return s
     }
 }
 
 class JoltageAnalyzer(private val firstLink: JoltageAdapter) {
-    val deltaDistribution: HashMap<Int,Int> by lazy {
+    val deltaDistribution: HashMap<Int, Int> by lazy {
         findDistribution()
     }
 
@@ -132,26 +130,25 @@ class JoltageAnalyzer(private val firstLink: JoltageAdapter) {
         return deltaDistribution.get(1)!!.toLong() * deltaDistribution.get(3)!!.toLong()
     }
 
-    private fun findDistribution(): HashMap<Int, Int> { 
-        var d = HashMap<Int,Int> ()
+    private fun findDistribution(): HashMap<Int, Int> {
+        var d = HashMap<Int, Int> ()
         var l: JoltageAdapter? = firstLink
-        while(l != null){
+        while (l != null) {
             var delta = l.nextAdapter?.output ?: 0 - l.output
-            if (delta < 0 ) break
-            d.put(delta, d.getOrDefault(delta, 0) + 1 )
+            if (delta < 0) break
+            d.put(delta, d.getOrDefault(delta, 0) + 1)
             l = l.nextAdapter
         }
         return d
     }
 }
 
-
 fun List<String>.toJoltageAdapters(withCharger: Boolean = false): JoltageAdapter {
-    val l = this.map{ it.toInt() }.sorted()
+    val l = this.map { it.toInt() }.sorted()
     var i = 0
     var adapter = JoltageAdapter(0, 3, null)
     val firstAdapter = adapter
-    while(i < l.size) {
+    while (i < l.size) {
         adapter = adapter.append(JoltageAdapter(l[i], 3, adapter))
         i++
     }

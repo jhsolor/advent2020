@@ -1,11 +1,10 @@
 package adventofcode2020
 
-import kotlin.test.Test
-import kotlin.test.assert
-import kotlin.test.assertEquals
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.isA
 import com.natpryce.hamkrest.throws
+import kotlin.test.Test
+import kotlin.test.assertEquals
 
 class Day8Test {
     @Test fun testCanParseRules() {
@@ -26,11 +25,11 @@ class Day8Test {
     @Test fun testThrowsLoopException() {
         val nop = Instruction.fromString("nop +0")
         nop.visit()
-        assertThat({nop.visit()}, throws<InfiniteLoopException>())
+        assertThat({ nop.visit() }, throws<InfiniteLoopException>())
     }
 
     @Test fun testCanAccumulate() {
-        val instructions = listOf(Instruction.fromString("nop +0"),Instruction.fromString("acc +10"))
+        val instructions = listOf(Instruction.fromString("nop +0"), Instruction.fromString("acc +10"))
         val g = Game(instructions)
         assertEquals(10, g.main())
     }
@@ -40,4 +39,3 @@ class Day8Test {
         assertEquals(8, g.fix())
     }
 }
-

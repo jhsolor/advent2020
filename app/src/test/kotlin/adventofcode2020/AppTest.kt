@@ -4,11 +4,10 @@
 package adventofcode2020
 
 import kotlin.test.Test
-import kotlin.test.assertNotNull
 
 class ResourceTest {
     @Test fun testResourceHasAGreeting() {
-     //   val classUnderTest = Resource("")
-     //   assertNotNull(classUnderTest.resource(), "app should have a greeting")
+        //   val classUnderTest = Resource("")
+        //   assertNotNull(classUnderTest.resource(), "app should have a greeting")
     }
 }

@@ -18,7 +18,6 @@ class TobogganSlopeTest {
         assertEquals(0, testSlope.slide(1, 2)) // because we teleport through the first tree
     }
 
-
 // #...#
 // ##..#
 // #.#.#
@@ -26,6 +25,6 @@ class TobogganSlopeTest {
 // #...#
 
     companion object {
-        val TEST_SLOPE = listOf("#...#","##..#","#.#.#","#..##","#...#")
+        val TEST_SLOPE = listOf("#...#", "##..#", "#.#.#", "#..##", "#...#")
     }
 }

@@ -3,8 +3,8 @@ package adventofcode2020
 import com.google.common.io.Resources
 
 class Resource(val resourceSuffix: String) {
-    val lines: List<String> by lazy { 
-        Resources.readLines(resource(),Charsets.UTF_8).filter { it.length > 0 }
+    val lines: List<String> by lazy {
+        Resources.readLines(resource(), Charsets.UTF_8).filter { it.length > 0 }
     }
 
     val grouped: List<String> by lazy {
@@ -12,7 +12,7 @@ class Resource(val resourceSuffix: String) {
     }
 
     fun resource(): java.net.URL {
-        return Resource::class.java.getResource("${DAY_RESOURCE_CONVENTION}${resourceSuffix}")
+        return Resource::class.java.getResource("${DAY_RESOURCE_CONVENTION}$resourceSuffix")
     }
 
     companion object {
@@ -23,4 +23,3 @@ class Resource(val resourceSuffix: String) {
 fun resourceFactory(day: String): Resource {
     return Resource(day)
 }
-

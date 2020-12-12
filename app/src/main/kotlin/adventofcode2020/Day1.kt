@@ -1,12 +1,10 @@
 // Day1
 package adventofcode2020
 
-import com.google.common.io.Resources;
-
 class Day1(resource: Resource) : ResourceSolver(resource) {
 
     private val list: List<Int> by lazy {
-       resource.lines.map { it.toInt() }.sorted()
+        resource.lines.map { it.toInt() }.sorted()
     }
 
     override fun solve1(): Long {
@@ -25,10 +23,7 @@ class Day1(resource: Resource) : ResourceSolver(resource) {
                     }
                 }
             }
-
-
         }
         TODO("Didn't find an answer")
     }
-
 }

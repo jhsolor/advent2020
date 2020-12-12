@@ -9,7 +9,6 @@ class Day5(resource: Resource) : ResourceSolver(resource) {
     }
 }
 
-
 // FBFBBFFRLR
 
 // 2^6 | 2^5 | 2^4 | 2^3 | 2^2 | 2^1 
@@ -18,7 +17,7 @@ class Day5(resource: Resource) : ResourceSolver(resource) {
 
 fun String.toNum(zero: Char, one: Char): Int {
     // convert F's to 1s and B's to 0
-    return Integer.parseInt((this.filter { it == one || it == zero } ).replace(one,'1').replace(zero,'0'),2)
+    return Integer.parseInt((this.filter { it == one || it == zero }).replace(one, '1').replace(zero, '0'), 2)
 }
 
 fun seatId(s: String): Int {
@@ -37,12 +36,11 @@ fun missingSeat(l: List<String>): Int {
     var i = 0
     // 0 1 2 3 4 5 7 8 9
     //           i j
-    while(i < 1024) {
-        if(ids[i+1] - ids[i] > 1) {
+    while (i < 1024) {
+        if (ids[i + 1] - ids[i] > 1) {
             return ids[i] + 1
         }
         i++
     }
     throw IllegalStateException()
 }
-

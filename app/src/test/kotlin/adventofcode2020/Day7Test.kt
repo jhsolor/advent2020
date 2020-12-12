@@ -1,12 +1,7 @@
 package adventofcode2020
 
-import adventofcode2020.Year
 import kotlin.test.Test
-import kotlin.test.assert
 import kotlin.test.assertEquals
-import com.natpryce.hamkrest.assertion.assertThat
-import com.natpryce.hamkrest.isA
-import com.natpryce.hamkrest.throws
 
 class Day7Test {
 	val testRules = listOf(
@@ -19,21 +14,20 @@ class Day7Test {
         "vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.",
         "faded blue bags contain no other bags.",
         "dotted black bags contain no other bags."
-    ) 
+    )
     @Test fun testCanParseRules() {
         var d = Day7(Resource("7"))
-        for(rule in testRules) {
+        for (rule in testRules) {
             d.parseRule(rule)
         }
     }
 
     @Test fun testCanAccumulate() {
         var d = Day7(Resource("7"))
-        for(rule in testRules) { 
+        for (rule in testRules) {
             d.parseRule(rule)
         }
         assertEquals(0, d.countDescendants("faded black"))
         assertEquals(11, d.countDescendants("vibrant plum"))
     }
 }
-

@@ -1,7 +1,7 @@
 package adventofcode2020
 
 fun main(args: Array<String>) {
-    
+
     // offer what day we are trying to solve
     println("What day are you on?")
     val day = readLine()!!
@@ -10,9 +10,8 @@ fun main(args: Array<String>) {
 
     println("What part are you solving?")
     val part = readLine()!!.toInt()
-    when(part) {
-      1 -> println(solver.solve1())
-      2 -> println(solver.solve2())
+    when (part) {
+        1 -> println(solver.solve1())
+        2 -> println(solver.solve2())
     }
 }
-

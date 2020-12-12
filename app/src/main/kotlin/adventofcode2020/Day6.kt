@@ -9,11 +9,11 @@ class Day6(resource: Resource) : ResourceSolver(resource) {
         return countUniform().toLong()
     }
 
-    fun countDistinct(): Int{
+    fun countDistinct(): Int {
         return resource.grouped.map { it.toCharArray().filter { it != ' ' }.distinct().size }.reduce { sum, line -> sum + line }
     }
 
-    fun countUniform(): Int{
+    fun countUniform(): Int {
         var result = 0
         for (group in resource.grouped) {
             val passengers = group.split(" ").filter { it.length > 0 }.sortedBy { it.length }
@@ -27,4 +27,3 @@ class Day6(resource: Resource) : ResourceSolver(resource) {
         return result
     }
 }
-

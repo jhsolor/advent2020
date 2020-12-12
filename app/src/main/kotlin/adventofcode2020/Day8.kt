@@ -11,7 +11,6 @@ class Day8(resource: Resource) : ResourceSolver(resource) {
 
     fun game(): Game {
         return Game(resource.lines.map { Instruction.fromString(it) })
-
     }
 }
 
@@ -24,16 +23,16 @@ class Instruction(var type: InstructionType, val num: Int) {
     var mutated: Int = 0
     val originalType = type
     fun visit() {
-        if(visited) throw InfiniteLoopException("Already visited this instruction ${type} ${num}")
+        if (visited) throw InfiniteLoopException("Already visited this instruction $type $num")
         visited = true
     }
 
     fun mutate() {
-        //if(mutated > 2) throw InfiniteLoopException("Already mutated twice")
-        when(type) {
+        // if(mutated > 2) throw InfiniteLoopException("Already mutated twice")
+        when (type) {
             InstructionType.Jump -> type = InstructionType.NoOp
             InstructionType.NoOp -> type = InstructionType.Jump
-            else -> throw MutationInvalidException("Cannot mutate this type: ${type}")
+            else -> throw MutationInvalidException("Cannot mutate this type: $type")
         }
         mutated++
     }
@@ -47,23 +46,23 @@ class Instruction(var type: InstructionType, val num: Int) {
     }
 
     override fun toString(): String {
-        return "${type} ${num}"
+        return "$type $num"
     }
 
     companion object {
         val regex = """(\w\w\w)\s+([+-])(\d+)""".toRegex()
         fun fromString(s: String): Instruction {
             val (instr, sign, num) = regex.matchEntire(s)!!.destructured
-            val type = when(instr) {
+            val type = when (instr) {
                 "acc" -> InstructionType.Accumulate
                 "nop" -> InstructionType.NoOp
                 "jmp" -> InstructionType.Jump
-                else -> throw IllegalArgumentException("Not an instruction type: ${instr}")
+                else -> throw IllegalArgumentException("Not an instruction type: $instr")
             }
-            val n = when(sign) {
+            val n = when (sign) {
                 "+" -> num.toInt()
                 "-" -> num.toInt() * -1
-                else -> throw IllegalArgumentException("Not a valid sign: ${sign}")
+                else -> throw IllegalArgumentException("Not a valid sign: $sign")
             }
             return Instruction(type, n)
         }
@@ -77,37 +76,37 @@ class Game(val instructions: List<Instruction>) {
 
     fun main(): Long {
         try {
-            loop() 
-        } catch (ex: InfiniteLoopException) { 
-            println("Exiting infinite loop: ${acc}")
+            loop()
+        } catch (ex: InfiniteLoopException) {
+            println("Exiting infinite loop: $acc")
         }
         return acc
     }
 
     fun loop() {
         var i = instructions[0]
-        while(i.type != InstructionType.Terminate) { i = handle(i) }
+        while (i.type != InstructionType.Terminate) { i = handle(i) }
     }
- 
+
     fun reset() { acc = 0; curPtr = 0; visited = mutableListOf<Int>(); instructions.forEach { it.reset() } }
 
     fun fix(): Long {
         main()
         var walkBack = 0
         val maxWalkBack = visited.size - 2
-        while(walkBack < maxWalkBack) { 
+        while (walkBack < maxWalkBack) {
             var loopPtr = visited[maxWalkBack - walkBack]
-            try { 
+            try {
                 fixState(loopPtr)
                 return acc
-            } catch(ex: GameException) {
-                when(ex) {
-                    is InfiniteLoopException -> { println("Exiting infinite loop: ${acc}"); revert(loopPtr) }
+            } catch (ex: GameException) {
+                when (ex) {
+                    is InfiniteLoopException -> { println("Exiting infinite loop: $acc"); revert(loopPtr) }
                     is MutationInvalidException -> println("Cannot mutate this type")
                     else -> throw ex
                 }
             }
-            walkBack++ 
+            walkBack++
         }
         return acc
     }
@@ -117,13 +116,13 @@ class Game(val instructions: List<Instruction>) {
         reset()
         loop()
     }
-        
+
     fun revert(ptr: Int) {
         instructions[ptr].revert()
     }
 
-    fun handle(i: Instruction): Instruction { 
-        when(i.type) {
+    fun handle(i: Instruction): Instruction {
+        when (i.type) {
             InstructionType.NoOp -> { return next() }
             InstructionType.Accumulate -> { acc += i.num; return next() }
             InstructionType.Jump -> { return next(i.num) }
@@ -133,14 +132,13 @@ class Game(val instructions: List<Instruction>) {
 
     fun next(j: Int = 1): Instruction {
         curPtr += j
-        if(curPtr >= instructions.size) return Instruction(InstructionType.Terminate, 0)
+        if (curPtr >= instructions.size) return Instruction(InstructionType.Terminate, 0)
         visited.add(curPtr)
         instructions[curPtr].visit()
         return instructions[curPtr]
     }
 }
 
-open class GameException(message:String): Exception(message)
-class InfiniteLoopException(message:String): GameException(message)
-class MutationInvalidException(message:String): GameException(message)
-
+open class GameException(message: String) : Exception(message)
+class InfiniteLoopException(message: String) : GameException(message)
+class MutationInvalidException(message: String) : GameException(message)
