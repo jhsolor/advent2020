@@ -4,7 +4,7 @@ import kotlin.test.Test
 import kotlin.test.assertEquals
 
 class Day7Test {
-	val testRules = listOf(
+    val testRules = listOf(
         "light red bags contain 1 bright white bag, 2 muted yellow bags.",
         "dark orange bags contain 3 bright white bags, 4 muted yellow bags.",
         "bright white bags contain 1 shiny gold bag.",

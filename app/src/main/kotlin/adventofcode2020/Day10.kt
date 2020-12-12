@@ -125,7 +125,7 @@ class JoltageAnalyzer(private val firstLink: JoltageAdapter) {
         findDistribution()
     }
 
-	// 1 | 2 | 3 | 4 | 5 |
+    // 1 | 2 | 3 | 4 | 5 |
     fun multiplySpread(): Long {
         return deltaDistribution.get(1)!!.toLong() * deltaDistribution.get(3)!!.toLong()
     }
