@@ -18,29 +18,22 @@ class Day10(resource: Resource) : ResourceSolver(resource) {
     }
     override fun solve2(): Long {
          val j = resource.lines.toJoltageAdapters(true)
-         return j.end.paths() 
+         return j.end().paths() 
     }
 }
 
 class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, private val previous: JoltageAdapter? = null) {
-    private var terminated = false
     var nextAdapter: JoltageAdapter? = null
     fun append(joltageAdapter: JoltageAdapter): JoltageAdapter {
-        if(terminated) throw IllegalStateException("Can't append to a terminated loop")
         val delta = joltageAdapter.output - output
         if (delta > maxJoltageGap) throw IllegalArgumentException("${delta} is greater than max allowed gap ${maxJoltageGap}")
         nextAdapter = joltageAdapter
         return nextAdapter as JoltageAdapter
     }
 
-    private fun end(): JoltageAdapter {
-        terminated = true
+    fun end(): JoltageAdapter {
         if (nextAdapter != null) return nextAdapter!!.end()
         return this
-    }
-
-    val end: JoltageAdapter by lazy {   
-        end()   
     }
 
     fun appendCharger() { 
