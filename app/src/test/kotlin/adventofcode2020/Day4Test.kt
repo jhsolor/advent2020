@@ -1,11 +1,10 @@
-
 package adventofcode2020
 
 import com.natpryce.hamkrest.assertion.assertThat
 import com.natpryce.hamkrest.isA
 import com.natpryce.hamkrest.throws
+import kotlin.assert
 import kotlin.test.Test
-import kotlin.test.assert
 import kotlin.test.assertEquals
 
 class Day4Test {
