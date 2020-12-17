@@ -52,17 +52,11 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
 
     fun backDelta(): Int? {
         if (previous == null) return null
-        return output - previous!!.output
+        return output - previous.output
     }
 
     fun max(): Int {
         return end().output
-    }
-
-    fun canToggle(): Boolean {
-        // we can toggle a switch if there's one ahead of and behind it with a gap <= maxJoltageGap
-        val prevGap: Int = backDelta() ?: maxJoltageGap + 1
-        TODO()
     }
 
     // How many configurations this switch can be a part of
@@ -84,13 +78,11 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
             else p += path
         }
 
-        println("$p paths to $output from $lookback")
         return p
     }
 
     val paths: Long by lazy {
         var p = paths()
-        println("Memoizing $output paths: $p")
         p
     }
 
@@ -102,15 +94,14 @@ class JoltageAdapter(val output: Int, private val maxJoltageGap: Int = 3, privat
     fun lookback(from: Int = output): List<JoltageAdapter> {
         // walk back until we find one that's not too far back voltage-wise
         var l = mutableListOf<JoltageAdapter>()
-        if (previous == null) { println("Node $output has no previous nodes, returning empty list") ; return l }
+        if (previous == null) return l
         var prev = previous
         while (prev != null) {
-            val pv = prev!!.output
+            val pv = prev.output
             if (from - pv > maxJoltageGap) return l
             l.add(prev)
-            prev = prev?.previous
+            prev = prev.previous
         }
-        println(l)
         return l
     }
 
