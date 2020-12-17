@@ -11,7 +11,13 @@ class Day11(resource: Resource) : ResourceSolver(resource) {
         return occupied
     }
     override fun solve2(): Long {
-        TODO()
+        val sc = SeatingChart(resource.lines, FirstVisibleSeatingStrategy(), 5)
+        sc.main()
+        var occupied: Long = 0
+        for (row in sc.rows) {
+            for (seat in row) if (seat == Seat.Occupied) occupied++
+        }
+        return occupied
     }
 }
 
@@ -37,7 +43,27 @@ fun List<String>.toSeatRows(): Array<Array<Seat>> {
     return r.toTypedArray()
 }
 
-class SeatingChart(private val rowSource: List<String>) {
+fun Array<Array<Seat>>.dump() {
+    for (row in this) {
+        for (seat in row) {
+            var c = "$seat".toCharArray()[0]
+            var s = when (c) {
+                'O' -> '#'
+                'E' -> 'L'
+                'F' -> '.'
+                else -> ' '
+            }
+            print(s)
+        }
+        print("\n")
+    }
+}
+
+interface SeatingStrategy {
+    fun nearbySeats(rows: Array<Array<Seat>>, col: Int, row: Int): List<Seat>
+}
+
+class SeatingChart(private val rowSource: List<String>, val seatStrategy: SeatingStrategy = AdjacentSeatingStrategy(), private val maxNearby: Int = 4) {
     val rows: Array<Array<Seat>> by lazy {
         rowSource.toSeatRows()
     }
@@ -54,9 +80,13 @@ class SeatingChart(private val rowSource: List<String>) {
 
     fun main() {
         var changes = true
+        var i = 1
         while (changes) {
+
             shuffle()
+
             changes = apply()
+            i++
         }
     }
 
@@ -66,8 +96,9 @@ class SeatingChart(private val rowSource: List<String>) {
             var col = 0
             while (col < width) {
                 if (rows[row][col] != Seat.Floor) {
-                    val m = evaluate(adjacentSeats(row, col))
+                    val m = evaluate(seatStrategy.nearbySeats(rows, col, row))
                     val mut = Mutator(row, col, m)
+
                     mutateCoordinates.add(mut)
                 }
                 col++
@@ -93,29 +124,71 @@ class SeatingChart(private val rowSource: List<String>) {
         return changes
     }
 
-    fun adjacentSeats(row: Int, col: Int): List<Seat> {
-        var i = row - 1
-        val s = mutableListOf<Seat>()
-        while (i <= row + 1) {
-            var j = col - 1
-            if (i < 0 || i >= height) { i++; continue }
-            while (j <= col + 1) {
-                if (j < 0 || j >= width || (i == row && j == col)) { j++; continue }
-                s.add(rows[i][j])
+    fun evaluate(adjacent: List<Seat>): Mutate {
+
+        val occupied = adjacent.filter { it == Seat.Occupied }
+        return when {
+            occupied.size == 0 -> Mutate.Occupy
+            occupied.size >= maxNearby -> Mutate.Vacate
+            else -> Mutate.NoChange
+        }
+    }
+}
+
+abstract class RowSeatingStrategy() : SeatingStrategy {
+    var width = 0
+    var height = 0
+
+    override fun nearbySeats(rows: Array<Array<Seat>>, col: Int, row: Int): List<Seat> {
+
+        width = rows[0].size
+        height = rows.size
+        val seats = mutableListOf<Seat?>()
+        var i = -1
+        while (i <= 1) {
+            var j = -1
+            while (j <= 1) {
+                if (i == 0 && j == 0) { j++; continue }
+                seats.add(seat(rows, col, row, i, j))
                 j++
             }
             i++
         }
-        return s
+
+        return seats.filterIsInstance<Seat>()
     }
 
-    fun evaluate(adjacent: List<Seat>): Mutate {
-        val occupied = adjacent.filter { it == Seat.Occupied }
-        return when (occupied.size) {
-            0 -> Mutate.Occupy
-            1, 2, 3 -> Mutate.NoChange
-            else -> Mutate.Vacate
+    abstract fun seat(rows: Array<Array<Seat>>, col: Int, row: Int, horiz: Int, vert: Int): Seat?
+
+    fun seek(rows: Array<Array<Seat>>, col: Int, row: Int, horizontal: Int, vertical: Int, min_x: Int, max_x: Int, min_y: Int, max_y: Int): Seat? {
+
+        var x = col
+        var y = row
+        // seek to the boundary
+        while (y >= min_y && y <= max_y && x >= min_x && x <= max_x) {
+
+            if (x != col || y != row) {
+                try {
+
+                    if (rows[y][x] != Seat.Floor) return rows[y][x]
+                } catch (ex: ArrayIndexOutOfBoundsException) {}
+            }
+            x += horizontal
+            y += vertical
         }
+        return null
+    }
+}
+
+class AdjacentSeatingStrategy() : RowSeatingStrategy() {
+    override fun seat(rows: Array<Array<Seat>>, col: Int, row: Int, horiz: Int, vert: Int): Seat? {
+        return seek(rows, col, row, horiz, vert, col - 1, col + 1, row - 1, row + 1)
+    }
+}
+
+class FirstVisibleSeatingStrategy() : RowSeatingStrategy() {
+    override fun seat(rows: Array<Array<Seat>>, col: Int, row: Int, horiz: Int, vert: Int): Seat? {
+        return seek(rows, col, row, horiz, vert, 0, width, 0, height)
     }
 }
 
