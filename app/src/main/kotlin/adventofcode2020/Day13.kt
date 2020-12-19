@@ -35,7 +35,7 @@ fun String.toPotentialBusDepartures(): List<Pair<Int, Int>>{
     }.filter { it.first >= 0 }
 }
 
-fun offsetModulo(dividend: Long = 1, vararg divisorRemainders: Pair<Int, Int>): Long {
+fun offsetModulo(dividend: Long = 0, vararg divisorRemainders: Pair<Int, Int>): Long {
     var compoundDivisor: Long = 1
 //    var found = 0
     var i = dividend - 1
@@ -43,12 +43,12 @@ fun offsetModulo(dividend: Long = 1, vararg divisorRemainders: Pair<Int, Int>): 
         val (divisor, remainder) = divisorRemainder
         if (remainder >= divisor) throw IllegalArgumentException()
         println(compoundDivisor)
-        var j: Long = 0
+        var j: Long = -1
         while (j != remainder.toLong()) {
             if (i < 0) {
                 throw IllegalStateException()
             }
-            i += compoundDivisor 
+            i += compoundDivisor
             j = i % divisor
         }
         compoundDivisor *= divisor
@@ -58,7 +58,7 @@ fun offsetModulo(dividend: Long = 1, vararg divisorRemainders: Pair<Int, Int>): 
 }
 
 fun timestamp(timetable: List<Pair<Int, Int>>, startTime: Long = 1): Long {
-    println(timetable)
+    println("Starting at $startTime: $timetable")
     val m = offsetModulo(startTime, *(timetable.toTypedArray()))
     println(m)
     return m
